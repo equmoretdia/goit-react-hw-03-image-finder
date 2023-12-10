@@ -14,5 +14,6 @@ export default async function fetchPictures(query, page) {
     throw new Error(response.status);
   }
   const pictures = response.data;
+  console.log(pictures);
   return pictures;
 }

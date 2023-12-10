@@ -4,24 +4,32 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import css from './App.module.css';
 import Searchbar from './Searchbar';
+import ImageGallery from './ImageGallery';
 import api from '../services/api';
 
 export default class App extends Component {
   state = {
     searchQuery: '',
+    page: 1,
+    picturesSet: [],
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchQuery } = this.state;
-    try {
-      api(searchQuery, 1);
-    } catch (error) {
-      if (error.message === 'Network Error') {
-        console.log(
-          'Internet connection is lost. Please try again as soon as your connection is restored'
+    const { searchQuery, page } = this.state;
+    if (prevState.searchQuery !== searchQuery) {
+      const { searchQuery } = this.state;
+      try {
+        api(searchQuery, page).then(pictures =>
+          this.setState({ picturesSet: pictures.hits })
         );
-      } else {
-        console.log('An error occurred: ', error.message);
+      } catch (error) {
+        if (error.message === 'Network Error') {
+          console.log(
+            'Internet connection is lost. Please try again as soon as your connection is restored'
+          );
+        } else {
+          console.log('An error occurred: ', error.message);
+        }
       }
     }
   }
@@ -31,10 +39,11 @@ export default class App extends Component {
   };
 
   render() {
+    const { picturesSet } = this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmit={this.handleQuery} />
-
+        <ImageGallery pictures={picturesSet} />
         <ToastContainer
           autoClose={3000}
           hideProgressBar={false}
