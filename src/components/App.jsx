@@ -63,7 +63,7 @@ export default class App extends Component {
       api(searchQuery, page + 1).then(pictures => {
         this.setState(
           prevState => ({
-            picturesSet: pictures.hits,
+            picturesSet: [...prevState.picturesSet, ...pictures.hits],
             searchMatches: prevState.searchMatches + pictures.hits.length,
             page: prevState.page + 1,
           }),
