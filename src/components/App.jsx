@@ -20,12 +20,12 @@ export default class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { searchQuery, page } = this.state;
-    if (prevState.searchQuery !== searchQuery) {
+    if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       try {
         api(searchQuery, page).then(pictures => {
           this.setState(
             prevState => ({
-              picturesSet: pictures.hits,
+              picturesSet: [...prevState.picturesSet, ...pictures.hits],
               searchMatches: prevState.searchMatches + pictures.hits.length,
               totalHits: pictures.totalHits,
             }),
@@ -59,31 +59,9 @@ export default class App extends Component {
   };
 
   loadMorePictures = () => {
-    const { searchQuery, page } = this.state;
-    try {
-      api(searchQuery, page + 1).then(pictures => {
-        this.setState(
-          prevState => ({
-            picturesSet: [...prevState.picturesSet, ...pictures.hits],
-            searchMatches: prevState.searchMatches + pictures.hits.length,
-            page: prevState.page + 1,
-          }),
-          () => {
-            console.log(
-              `we have loaded ${this.state.searchMatches} out of ${this.state.totalHits} totally found`
-            );
-          }
-        );
-      });
-    } catch (error) {
-      if (error.message === 'Network Error') {
-        console.log(
-          'Internet connection is lost. Please try again as soon as your connection is restored'
-        );
-      } else {
-        console.log('An error occurred: ', error.message);
-      }
-    }
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
 
   render() {
