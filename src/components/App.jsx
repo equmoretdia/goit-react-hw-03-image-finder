@@ -1,11 +1,12 @@
 import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
+import 'react-toastify/dist/ReactToastify.css';
 import css from './App.module.css';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
+
 import api from '../services/api';
 
 export default class App extends Component {
@@ -95,6 +96,7 @@ export default class App extends Component {
         {searchMatches < totalHits && (
           <Button onClick={this.loadMorePictures} />
         )}
+
         <ToastContainer
           autoClose={3000}
           hideProgressBar={false}
