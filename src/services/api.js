@@ -4,7 +4,7 @@ const BASE_URL = 'https://pixabay.com/api';
 const API_KEY = '40252258-b27561441daedadb4fc814a5c';
 const imageType = 'photo';
 const orientation = 'horizontal';
-const picturesPerPage = 40;
+const picturesPerPage = 12;
 
 export default async function fetchPictures(query, page) {
   const response = await axios(

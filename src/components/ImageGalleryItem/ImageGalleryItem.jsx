@@ -18,7 +18,7 @@ export default class ImageGalleryItem extends Component {
     const { webformatURL } = this.props;
     return (
       <li className={css.item} onClick={this.handleClick}>
-        <img className={css.image} src={webformatURL} alt="" />
+        <img className={css.image} src={webformatURL} alt="" loading="lazy" />
       </li>
     );
   }
