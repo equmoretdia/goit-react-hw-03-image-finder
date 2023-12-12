@@ -12,7 +12,12 @@ const axiosInstance = axios.create({
 
 export default async function fetchPictures(query, page) {
   try {
-    const response = await axiosInstance.get(`q=${query}&page=${page}`);
+    const response = await axiosInstance.get('', {
+      params: {
+        q: query,
+        page: page,
+      },
+    });
     const pictures = response.data;
     console.log(pictures);
     return pictures;
