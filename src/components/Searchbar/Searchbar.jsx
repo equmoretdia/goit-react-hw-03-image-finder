@@ -20,7 +20,8 @@ export default class Searchbar extends Component {
 
     if (this.state.searchQuery.trim() === '') {
       return toast.warn('Please enter a search query', {
-        position: 'top-center',
+        position: 'top-right',
+        theme: 'colored',
       });
     }
 

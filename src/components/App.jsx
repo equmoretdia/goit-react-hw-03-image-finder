@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import css from './App.module.css';
@@ -37,18 +38,41 @@ export default class App extends Component {
               console.log(
                 `we have loaded ${this.state.searchMatches} out of ${this.state.totalHits} totally found`
               );
+              if (
+                this.state.searchMatches === this.state.totalHits &&
+                this.state.totalHits > 0
+              ) {
+                toast.info("You've reached the end of search results.", {
+                  position: 'top-right',
+                  theme: 'colored',
+                });
+              } else if (this.state.totalHits > 0 && this.state.page === 1) {
+                toast.success(
+                  `Hooray! We found ${this.state.totalHits} images`,
+                  {
+                    position: 'top-right',
+                    theme: 'colored',
+                  }
+                );
+              } else {
+                toast.warn(
+                  'No pictures were found for your query, please try another one!',
+                  {
+                    position: 'top-right',
+                    theme: 'colored',
+                  }
+                );
+              }
             }
           );
         });
       } catch (error) {
         this.setState({ pendingRequest: false });
-        if (error.message === 'Network Error') {
-          console.log(
-            'Internet connection is lost. Please try again as soon as your connection is restored'
-          );
-        } else {
-          console.log('An error occurred: ', error.message);
-        }
+        console.log('An error occurred: ', error.message);
+        toast.error(`An error occurred: ${error.message}`, {
+          position: 'top-right',
+          theme: 'colored',
+        });
       }
     }
   }
