@@ -6,13 +6,13 @@ const axiosInstance = axios.create({
     key: '40252258-b27561441daedadb4fc814a5c',
     image_type: 'photo',
     orientation: 'horizontal',
-    per_page: 12,
+    per_page: 40,
   },
 });
 
 export default async function fetchPictures(query, page) {
   try {
-    const response = await axiosInstance.get('', {
+    const response = await axiosInstance({
       params: {
         q: query,
         page: page,

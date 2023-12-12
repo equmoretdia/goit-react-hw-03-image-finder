@@ -22,8 +22,8 @@ export default class App extends Component {
     const { searchQuery, page } = this.state;
     if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       this.setState({ pendingRequest: true });
-      try {
-        api(searchQuery, page).then(pictures => {
+      api(searchQuery, page)
+        .then(pictures => {
           this.setState(
             prevState => ({
               pendingRequest: false,
@@ -38,10 +38,8 @@ export default class App extends Component {
               this.handleNotifications();
             }
           );
-        });
-      } catch (error) {
-        this.handleError(error);
-      }
+        })
+        .catch(error => this.handleError(error));
     }
   }
 
