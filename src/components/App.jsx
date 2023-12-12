@@ -1,14 +1,11 @@
 import { Component } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { toast } from 'react-toastify';
-
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import css from './App.module.css';
 import Searchbar from './Searchbar';
 import Loader from './Loader';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
-
 import api from '../services/api';
 
 export default class App extends Component {
@@ -38,44 +35,47 @@ export default class App extends Component {
               console.log(
                 `we have loaded ${this.state.searchMatches} out of ${this.state.totalHits} totally found`
               );
-              if (
-                this.state.searchMatches === this.state.totalHits &&
-                this.state.totalHits > 0
-              ) {
-                toast.info("You've reached the end of search results.", {
-                  position: 'top-right',
-                  theme: 'colored',
-                });
-              } else if (this.state.totalHits > 0 && this.state.page === 1) {
-                toast.success(
-                  `Hooray! We found ${this.state.totalHits} images`,
-                  {
-                    position: 'top-right',
-                    theme: 'colored',
-                  }
-                );
-              } else {
-                toast.warn(
-                  'No pictures were found for your query, please try another one!',
-                  {
-                    position: 'top-right',
-                    theme: 'colored',
-                  }
-                );
-              }
+              this.handleNotifications();
             }
           );
         });
       } catch (error) {
-        this.setState({ pendingRequest: false });
-        console.log('An error occurred: ', error.message);
-        toast.error(`An error occurred: ${error.message}`, {
-          position: 'top-right',
-          theme: 'colored',
-        });
+        this.handleError(error);
       }
     }
   }
+
+  handleNotifications = () => {
+    const { page, searchMatches, totalHits } = this.state;
+    if (totalHits > 0 && page === 1) {
+      toast.success(`Hooray! We found ${totalHits} images`, {
+        position: 'top-right',
+        theme: 'colored',
+      });
+    } else if (searchMatches === totalHits && totalHits > 0) {
+      toast.info("You've reached the end of search results.", {
+        position: 'top-right',
+        theme: 'colored',
+      });
+    } else if (totalHits === 0) {
+      toast.warn(
+        'No pictures were found for your query, please try another one!',
+        {
+          position: 'top-right',
+          theme: 'colored',
+        }
+      );
+    }
+  };
+
+  handleError = error => {
+    this.setState({ pendingRequest: false });
+    console.log('An error occurred: ', error.message);
+    toast.error(`An error occurred: ${error.message}`, {
+      position: 'top-right',
+      theme: 'colored',
+    });
+  };
 
   handleQuery = query => {
     this.setState({
