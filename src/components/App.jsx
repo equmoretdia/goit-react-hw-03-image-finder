@@ -35,7 +35,7 @@ export default class App extends Component {
               console.log(
                 `we have loaded ${this.state.searchMatches} out of ${this.state.totalHits} totally found`
               );
-              this.handleNotifications();
+              this.handleSearchNotifications();
             }
           );
         })
@@ -43,7 +43,7 @@ export default class App extends Component {
     }
   }
 
-  handleNotifications = () => {
+  handleSearchNotifications = () => {
     const { page, searchMatches, totalHits } = this.state;
     if (totalHits > 0 && page === 1) {
       toast.success(`Hooray! We found ${totalHits} images`, {
@@ -76,6 +76,16 @@ export default class App extends Component {
   };
 
   handleQuery = query => {
+    const { searchQuery } = this.state;
+    if (query === searchQuery) {
+      toast.warn(
+        `You are searching through the collection for "${query}" already!`,
+        {
+          position: 'top-right',
+          theme: 'colored',
+        }
+      );
+    }
     this.setState({
       searchQuery: query,
       page: 1,
